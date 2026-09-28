@@ -1,0 +1,31 @@
+.field {
+    margin-bottom: 18px;
+}
+
+.label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 7px;
+}
+
+.input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 11px 12px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+
+    &::placeholder {
+        color: var(--faint);
+    }
+
+    &:focus {
+        border-color: var(--accent);
+    }
+}
