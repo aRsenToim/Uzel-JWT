@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs";
 import { prisma } from "../lib/prisma.js";
 import type { Request, Response } from "express";
 import tokens from "../lib/tokens.js";
+import { randomInt } from "node:crypto";
+import MailService from "../service/MailService.js";
 
 const cookieOptions = {
     httpOnly: true,
@@ -10,8 +12,8 @@ const cookieOptions = {
     path: "/",
 };
 
-function publicUser(user: { id: number; name: string; email: string; role: string, image: string, status: string }) {
-    return { id: user.id, name: user.name, email: user.email, role: user.role, image: user.image, status: user.status };
+function publicUser(user: { id: number; name: string; email: string; role: string, image: string, status: string, isVerified: boolean }) {
+    return { id: user.id, name: user.name, email: user.email, role: user.role, image: user.image, status: user.status, isVerified: user.isVerified };
 }
 function setRefreshCookie(res: Response, token: string) {
     res.cookie("refreshToken", token, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
@@ -43,6 +45,8 @@ class AuthController {
                 return;
             }
 
+            const verifiedCode = randomInt(100000, 999999)
+            const verifiedExpires = new Date(Date.now() + 10 * 60 * 1000)
 
             const passwordHash = await bcrypt.hash(password, 12)
             const user = await prisma.user.create({
@@ -52,8 +56,13 @@ class AuthController {
                     status: "LGBT+",
                     name: name ?? "pidoras",
                     passwordHash,
+                    isVerified: false,
+                    verifiedCode,
+                    verifiedExpires
                 }
             })
+
+            await MailService.sendVerifiedCode(email, verifiedCode)
 
             const { accessToken, refreshToken } = tokens.generateTokens({ id: user.id, role: user.role });
 
@@ -149,6 +158,73 @@ class AuthController {
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async verifyUser(req: Request, res: Response) {
+        try {
+            const { code } = req.body as { code: string }
+
+            if (!Number(code)) {
+                res.status(401).json({ error: "Invalid credentials" });
+            }
+
+            const user = await prisma.user.findUnique({
+                where: { id: req.user.id }
+            })
+
+            if (!user || user.verifiedCode != Number(code)) {
+                res.status(400).json({ error: "Неверный код" })
+                return
+            }
+
+            if (!user.verifiedExpires || user.verifiedExpires < new Date()) {
+                res.status(400).json({ error: "Код истёк" })
+                return
+            }
+
+            await prisma.user.update({
+                where: { id: user.id },
+                data: {
+                    isVerified: true,
+                    verificationCode: null,
+                    verificationExpires: null,
+                },
+            })
+
+            res.json({ success: true })
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async sendVerifyCode(req: Request, res: Response) {
+        try {
+            const id = req.user.id
+            const user = await prisma.user.findUnique({ where: { id } })
+
+            if (!id || !user) {
+                res.status(400).json({ error: "Error" })
+                return
+            }
+
+            const verifiedCode = randomInt(100000, 999999)
+            const verifiedExpires = new Date(Date.now() + 10 * 60 * 1000)
+            
+            await prisma.user.update({
+                where: {id},
+                data: {
+                    verifiedCode,
+                    verifiedExpires
+                }
+            })
+            
+            await MailService.sendVerifiedCode(user.email, verifiedCode)
+
+            res.json({ success: true })
+        } catch (error) {
+
         }
     }
 }

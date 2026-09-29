@@ -13,11 +13,14 @@ enum Role {
 }
 
 model User {
-  id           Int    @id @default(autoincrement())
-  email        String @unique
-  name         String
-  passwordHash String
-  role         Role   @default(USER)
-  status       String
-  image        String
+  id              Int      @id @default(autoincrement())
+  isVerified      Boolean  @default(false)
+  verifiedCode    Int?
+  verifiedExpires DateTime?
+  email           String   @unique
+  name            String
+  passwordHash    String
+  role            Role     @default(USER)
+  status          String
+  image           String
 }

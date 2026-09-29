@@ -17,5 +17,6 @@ authRoutes.post('/login', authLimiter, AuthController.login)
 authRoutes.post('/refresh', AuthController.refresh)
 authRoutes.get('/me', AuthMiddleware, AuthController.auth)
 authRoutes.post('/logout', AuthController.logout)
-
+authRoutes.post('/verifiedUser', AuthMiddleware, AuthController.verifyUser)
+authRoutes.post('/sendVerifyUser', AuthMiddleware, AuthController.sendVerifyCode)
 export default authRoutes
