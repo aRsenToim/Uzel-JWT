@@ -3,19 +3,28 @@ import Home from "../../Pages/Home";
 import Regist from "../../Pages/Regist";
 import Login from "../../Pages/Login";
 import Profile from "../../Pages/Profile";
+import NotFound from "../../Pages/NotFound";
 
 enum RoutesName {
     Home='/',
     Users='/users',
     Login='/login',
     Regist='/regist',
-    Profile='/profile'
+    Profile='/profile',
+    NotFound = '/*'
 }
 
 export interface IRoute{
     name: string,
     element: React.ElementType
 }
+
+export const GeneralRoutes: IRoute[] = [
+    {
+        name: RoutesName.NotFound,
+        element: NotFound
+    }
+]
 
 export const protectedRoutes: IRoute[] = [
     {

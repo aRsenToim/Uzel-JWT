@@ -1,0 +1,52 @@
+.NotFound {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px;
+
+    &__code {
+        font-size: 72px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--accent);
+        margin: 0;
+        line-height: 1;
+    }
+
+    &__title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+        margin: 16px 0 6px;
+    }
+
+    &__subtitle {
+        font-size: 14px;
+        color: var(--muted);
+        margin: 0 0 28px;
+        max-width: 320px;
+    }
+
+    &__link {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text);
+        text-decoration: none;
+        padding: 10px 20px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        transition: border-color 0.15s;
+
+        &:hover {
+            border-color: var(--faint);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+    }
+}
