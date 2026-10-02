@@ -122,29 +122,3 @@ npm run dev
 ```
 
 Приложение будет доступно на `http://localhost:5173`.
-
-## API
-
-| Метод | Путь | Описание | Авторизация |
-|---|---|---|---|
-| POST | `/api/auth/register` | Регистрация | — |
-| POST | `/api/auth/login` | Вход | — |
-| POST | `/api/auth/refresh` | Обновление access-токена | refresh-cookie |
-| POST | `/api/auth/logout` | Выход | — |
-| GET | `/api/auth/me` | Текущий пользователь | access-токен |
-| GET | `/api/users` | Список пользователей (пагинация `?page=`) | access-токен |
-
-## Полезные команды Prisma
-
-```bash
-npx prisma migrate dev --name <имя>   # создать и применить миграцию
-npx prisma studio                     # визуальный просмотр БД
-npx prisma migrate reset              # сбросить БД (только для dev)
-```
-
-## Заметки по безопасности
-
-- Refresh-токен хранится в HttpOnly-cookie, недоступен для JS
-- Access-токен хранится только в памяти (Redux store), не в `localStorage`
-- Пароли хешируются через bcrypt перед сохранением
-- Роль при регистрации не принимается от клиента — всегда `USER` по умолчанию
