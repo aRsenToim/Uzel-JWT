@@ -12,8 +12,9 @@ const cookieOptions = {
     path: "/",
 };
 
-function publicUser(user: { id: number; name: string; email: string; role: string, image: string, status: string, isVerified: boolean }) {
-    return { id: user.id, name: user.name, email: user.email, role: user.role, image: user.image, status: user.status, isVerified: user.isVerified };
+function publicUser(user: {id: number; name: string; email: string; role: string, image: string, status: string, isVerified: boolean }) {
+    return { id: user.id, name: user.name, email: user.email, role: user.role, 
+        image: user.image, status: user.status, isVerified: user.isVerified};
 }
 function setRefreshCookie(res: Response, token: string) {
     res.cookie("refreshToken", token, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
@@ -44,10 +45,6 @@ class AuthController {
                 res.status(409).json({ error: "Email already registered" });
                 return;
             }
-
-            const verifiedCode = randomInt(100000, 999999)
-            const verifiedExpires = new Date(Date.now() + 10 * 60 * 1000)
-
             const passwordHash = await bcrypt.hash(password, 12)
             const user = await prisma.user.create({
                 data: {
@@ -57,12 +54,10 @@ class AuthController {
                     name: name ?? "pidoras",
                     passwordHash,
                     isVerified: false,
-                    verifiedCode,
-                    verifiedExpires
+                    verifiedCode: null,
+                    verifiedExpires: null
                 }
             })
-
-            await MailService.sendVerifiedCode(email, verifiedCode)
 
             const { accessToken, refreshToken } = tokens.generateTokens({ id: user.id, role: user.role });
 
@@ -167,18 +162,20 @@ class AuthController {
 
             if (!Number(code)) {
                 res.status(401).json({ error: "Invalid credentials" });
+                return
             }
 
             const user = await prisma.user.findUnique({
                 where: { id: req.user.id }
             })
-
-            if (!user || user.verifiedCode != Number(code)) {
+            console.log(code, user?.verifiedCode);
+            
+            if (!user || user?.verifiedCode != Number(code)) {
                 res.status(400).json({ error: "Неверный код" })
                 return
             }
 
-            if (!user.verifiedExpires || user.verifiedExpires < new Date()) {
+            if (!user?.verifiedExpires || user?.verifiedExpires < new Date()) {
                 res.status(400).json({ error: "Код истёк" })
                 return
             }
@@ -187,8 +184,8 @@ class AuthController {
                 where: { id: user.id },
                 data: {
                     isVerified: true,
-                    verificationCode: null,
-                    verificationExpires: null,
+                    verifiedCode: null,
+                    verifiedExpires: null,
                 },
             })
 

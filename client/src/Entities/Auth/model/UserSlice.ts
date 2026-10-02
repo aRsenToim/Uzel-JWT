@@ -5,12 +5,14 @@ interface IinitialState {
     profile: IUser | null,
     errorForm: string,
     isAuthChecked: boolean,
+    isStartVerified: boolean,
 }
 
 const initialState: IinitialState = {
     profile: null,
     errorForm: "",
-    isAuthChecked: false
+    isAuthChecked: false,
+    isStartVerified: false
 }
 
 
@@ -26,10 +28,13 @@ const UserSlice = createSlice({
     },
     setIsAuthChecked(state){
         state.isAuthChecked = true;
+    },
+    setIsStartVerified(state){
+        state.isStartVerified = true
     }
   }  
 })
 
 
 export default UserSlice.reducer
-export const {setErrorForm, setProfile, setIsAuthChecked} = UserSlice.actions
+export const {setErrorForm, setProfile, setIsAuthChecked, setIsStartVerified} = UserSlice.actions

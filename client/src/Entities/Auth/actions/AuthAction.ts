@@ -1,7 +1,7 @@
 import { isAxiosError } from "axios"
 import type { AppDispatch } from "../../../App/AppStore"
 import { AuthApi } from "../api/AuthApi"
-import { setErrorForm, setIsAuthChecked, setProfile } from "../model/UserSlice"
+import { setErrorForm, setIsAuthChecked, setIsStartVerified, setProfile } from "../model/UserSlice"
 import type { IError } from "../model/types"
 import { setAccessToken } from "../model/tokensSlice"
 
@@ -50,6 +50,24 @@ export const LogoutAction = () => {
         AuthApi.logout().then(() => {
             dispatch(setAccessToken(null))
             dispatch(setProfile(null))
+        })
+    }
+}
+
+export const sendVerifyUserAction = () => {
+    return (dispatch: AppDispatch) => {
+        AuthApi.verifAccount().then(() => {
+            dispatch(setIsStartVerified())
+        }).catch(() => {
+
+        })
+    }
+}
+
+export const verifiedUserAction = (code: string) => {
+    return (dispatch: AppDispatch) => {
+        AuthApi.verifiedUser(code).then(() => {
+            AuthApi.authme().then((res) => dispatch(setProfile(res.user)))
         })
     }
 }

@@ -21,9 +21,12 @@ const ProfileCard: FC<IProps> = ({ user, logout }) => {
                 alt={user.name}
                 className={s.ProfileCard__avatar}
             />
-            <div>
-                <p className={s.ProfileCard__name}>{user.name}</p>
-                <p className={s.ProfileCard__role}>{ROLE_LABEL[user.role]}</p>
+            <div className={s.ProfileCard__titleBlock}>
+                <div className={s.ProfileCard__title}>
+                    <p className={s.ProfileCard__name}>{user.name}</p>
+                    <p className={s.ProfileCard__role}>{ROLE_LABEL[user.role]}</p>
+                </div>
+                {user.isVerified ? <img alt='isVerified' className={s.ProfileCard__isVerified} src='/isVerified.svg' /> : <img className={s.ProfileCard__isVerified} alt='NoVerified' src='/NoVerified.svg' />}
             </div>
         </div>
 
@@ -46,7 +49,7 @@ const ProfileCard: FC<IProps> = ({ user, logout }) => {
             </div>
         </div>
 
-        <Button title='Выйти' click={logout}/>
+        <Button title='Выйти' click={logout} />
     </div>
 }
 

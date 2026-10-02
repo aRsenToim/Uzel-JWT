@@ -9,7 +9,8 @@ export interface IUser {
     email: string,
     role: string,
     status: string,
-    image: string
+    image: string,
+    isVerified: boolean
 }
 
 

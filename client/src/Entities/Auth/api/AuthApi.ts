@@ -19,5 +19,13 @@ export const AuthApi = {
     async logout(){
         const res = await instance.post('/auth/logout')
         return res.data
+    },
+    async verifAccount(){
+        const res = await instance.post('/auth/sendVerifyUser')
+        return res.data
+    },
+    async verifiedUser(code: string){
+        const res = await instance.post('/auth/verifiedUser', {code})
+        return res.data
     }
 }

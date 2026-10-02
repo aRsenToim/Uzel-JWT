@@ -1,7 +1,8 @@
-import { RegistAction, AuthMe, LoginAction, LogoutAction } from './actions/AuthAction';
+import { RegistAction, AuthMe, LoginAction, LogoutAction, sendVerifyUserAction, verifiedUserAction } from './actions/AuthAction';
 import TokensSlice, { setAccessToken } from './model/tokensSlice'
 import UserSlice from "./model/UserSlice"
 import AuthHeader from './ui/AuthHeader/AuthHeader';
+import ProfileSetting from './ui/ProfileSetting/ProfileSetting';
 
 
 
@@ -13,5 +14,8 @@ export {
     AuthHeader,
     AuthMe,
     LoginAction,
-    LogoutAction
+    LogoutAction,
+    sendVerifyUserAction,
+    verifiedUserAction,
+    ProfileSetting
 }

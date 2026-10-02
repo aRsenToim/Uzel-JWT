@@ -74,4 +74,15 @@
             outline-offset: 2px;
         }
     }
+    &__titleBlock{
+        display: flex;
+        align-items: flex-start;
+    }
+    &__isVerified{
+        margin-left: 10px;
+        width: 20px;
+        height: 20px;
+        margin-top: 3px;
+        cursor: pointer;
+    }
 }
