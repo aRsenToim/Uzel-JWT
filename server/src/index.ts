@@ -4,6 +4,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import UsersRoutes from "./routes/UsersRoutes.js";
 import fileUpload from 'express-fileupload'
+import swaggerUi from "swagger-ui-express"
+import { swaggerSpec } from "./swagger.js"
+
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -17,7 +20,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json()); 
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 app.use("/api/auth", authRoutes)
 app.use('/api/users', UsersRoutes)
