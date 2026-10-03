@@ -6,12 +6,14 @@ interface IInitialState {
     Users: IUser[],
     maxPage: number
     total: number
+    isSetUser: boolean
 }
 
 const initialState: IInitialState = {
     Users: [],
     maxPage: 0,
-    total: 0
+    total: 0,
+    isSetUser: false
 }
 
 
@@ -27,10 +29,13 @@ const UsersSlice = createSlice({
         },
         setTotal(state, action: PayloadAction<number>){
             state.total = action.payload
+        },
+        setIsUser(state,){
+            state.isSetUser = true
         }
     }
 })
 
 
 export default UsersSlice.reducer
-export const {addUsers, setMaxPage, setTotal} = UsersSlice.actions
+export const {addUsers, setMaxPage, setTotal, setIsUser} = UsersSlice.actions

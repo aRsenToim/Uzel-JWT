@@ -1,6 +1,6 @@
 import type { AppDispatch } from "../../../App/AppStore"
 import { UsersApi } from "../api/UsersApi"
-import { addUsers, setMaxPage, setTotal } from "../model/UsersSlice"
+import { addUsers, setIsUser, setMaxPage, setTotal } from "../model/UsersSlice"
 
 
 
@@ -10,6 +10,7 @@ export const GetUsersFetch = (page: number) => {
             dispatch(addUsers(res.users))
             dispatch(setMaxPage(res.totalPages))
             dispatch(setTotal(res.total))
+            dispatch(setIsUser())
         })
     }
 }

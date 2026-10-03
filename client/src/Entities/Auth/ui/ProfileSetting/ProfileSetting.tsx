@@ -15,16 +15,19 @@ const ProfileSetting: FC<IProps> = ({ isStartVerified, verifiedUserAction, sendV
     const [code, setCode] = useState<string>("")
 
     return <div className={s.ProfileSetting}>
-        {accountVerified ?? <>{isStartVerified ? <div className={s.ProfileSetting__verifiedAccount}>
-            <h1>Код подтверждения отправлен на {email}</h1>
+        {!accountVerified ? <>{isStartVerified ? <div className={s.ProfileSetting__verifiedAccount}>
+            <h1 className={s.ProfileSetting__title}>Код подтверждения отправлен на {email}</h1>
             <Input onChange={(e) => { setCode(e.currentTarget.value) }} value={code} label='Введите код' />
             <Button title='Отправить' style={{ width: "200px" }} click={() => {
                 verifiedUserAction(code)
             }} />
+            <Button title='Отправить письмо сново' style={{ width: "200px" }} click={() => {
+                sendVerifyUserAction()
+            }} />
         </div> : <Button title='Подтвердить аккаунт' disabled={startVerif} style={{ width: "200px" }} click={() => {
-            sendVerifyUserAction(),
-                setStartVerif(true)
-        }} />}</>}
+            sendVerifyUserAction()
+            setStartVerif(true)
+        }} />}</> : undefined}
     </div>
 }
 
