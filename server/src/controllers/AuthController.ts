@@ -49,7 +49,7 @@ class AuthController {
             const user = await prisma.user.create({
                 data: {
                     email,
-                    image: "http://localhost:3003/pidor.png",
+                    image: process.env.BASE_PROFILE_URL || "",
                     status: "LGBT+",
                     name: name ?? "pidoras",
                     passwordHash,
