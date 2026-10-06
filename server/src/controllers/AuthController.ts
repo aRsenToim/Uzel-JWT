@@ -50,8 +50,8 @@ class AuthController {
                 data: {
                     email,
                     image: process.env.BASE_PROFILE_URL || "",
-                    status: "LGBT+",
-                    name: name ?? "pidoras",
+                    status: "Your status",
+                    name: name ?? "User",
                     passwordHash,
                     isVerified: false,
                     verifiedCode: null,
